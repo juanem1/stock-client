@@ -33,6 +33,11 @@
       </v-list-tile>
     </v-list-group>
     <v-divider></v-divider>
+    <v-list-tile to="/l/products">
+      <v-list-tile-content>
+        <v-list-tile-title>Productos</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
     <v-list-tile to="/l/providers">
       <v-list-tile-content>
         <v-list-tile-title>Proveedores</v-list-tile-title>

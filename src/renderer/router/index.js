@@ -30,6 +30,15 @@ export default new Router({
           path: '/l/stock/in-stock',
           component: require('@/components/stock/InStock').default
         }, {
+          path: '/l/products',
+          component: require('@/components/products/List').default
+        }, {
+          path: '/l/products/add',
+          component: require('@/components/products/Add').default
+        }, {
+          path: '/l/products/:id/edit',
+          component: require('@/components/products/Edit').default
+        }, {
           path: '/l/providers',
           component: require('@/components/providers/List').default
         }, {
