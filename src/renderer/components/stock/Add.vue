@@ -39,6 +39,7 @@
 
 <script>
   import EventBus from '../event-bus'
+  import _ from 'lodash'
   export default {
     name: 'add-stock',
     data: function () {
@@ -47,7 +48,7 @@
         form: {
           provider: [],
           store: '',
-          movement: 'increment',
+          order_type: 1,
           // invoiceType: 'A',
           // invoice: '',
           products: [
@@ -79,7 +80,16 @@
     methods: {
       onSubmit () {
         this.btnLoading = true
-        this.$http.post('/order/increment', this.form)
+        let formated = _.map(this.form.products, function (item) {
+          return {
+            id: item.product.id,
+            name: item.product.name,
+            amount: Number(item.amount)
+          }
+        })
+        let form = _.clone(this.form)
+        form.products = formated
+        this.$http.post('/orders', form)
           .then(response => {
             EventBus.$emit('SHOW_MESSAGE', {
               color: 'success',
@@ -116,7 +126,7 @@
       },
       findProducts (q) {
         // this.loadingProviders = true
-        this.$http.get(`/products/search?q=${q}&fields=id,name,amount&provider=${this.form.provider}`)
+        this.$http.get(`/products/search?q=${q}&fields=id,name`)
           .then(response => {
             this.productList = response.data
           })
