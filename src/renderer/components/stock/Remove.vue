@@ -43,6 +43,7 @@
       return {
         form: {
           store: '',
+          order_type: 2,
           products: [{product: '', decrement: ''}]
         },
         rules: {},
@@ -72,7 +73,7 @@
         let form = _.clone(this.form)
         form.products = formated
 
-        this.$http.post('/orders/decrement', form)
+        this.$http.post('/orders', form)
           .then(response => {
             EventBus.$emit('SHOW_MESSAGE', {
               color: 'success',

@@ -51,9 +51,7 @@
           order_type: 1,
           // invoiceType: 'A',
           // invoice: '',
-          products: [
-            {product: '', amount: ''}
-          ]
+          products: [{product: '', amount: ''}]
         },
         rules: {
           provider: [() => this.searchProviders.length > 0 || 'Seleccione un proveedor'],
