@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <p class="headline">Ultimos movimientos</p> 
-    <v-data-table :headers="headers" :items="items" :loading="loading" hide-actions class="elevation-1">
+    <v-data-table disable-initial-sort="true" :headers="headers" :items="items" :loading="loading" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.user }}</td>
         <td class="text-xs-left">
@@ -10,6 +10,7 @@
             {{ props.item.action }}
           </v-chip>
         </td>
+        <td class="text-xs-left">{{ props.item.date }}</td>
         <td class="text-xs-left">{{ props.item.provider }}</td>
         <td class="text-xs-left">{{ props.item.fromStore }}</td>
         <td class="text-xs-left">{{ props.item.toStore }}</td>
@@ -44,6 +45,7 @@
         headers: [
           { text: 'Usuario', value: 'user' },
           { text: 'Accion', value: 'action' },
+          { text: 'Fecha', value: 'date' },
           { text: 'Proveedor', value: 'provider' },
           { text: 'De deposito', value: 'fromStore' },
           { text: 'A deposito', value: 'toStore' },
@@ -89,5 +91,3 @@
   }
 </script>
 
-<style>
-</style>
