@@ -124,7 +124,7 @@
       },
       findProducts (q) {
         // this.loadingProviders = true
-        this.$http.get(`/products/search?q=${q}&fields=id,name`)
+        this.$http.get(`/products/search?q=${q}&searchType=combo`)
           .then(response => {
             this.productList = response.data
           })

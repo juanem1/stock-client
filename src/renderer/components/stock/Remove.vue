@@ -64,10 +64,10 @@
         this.btnLoading = true
         let formated = _.map(this.form.products, function (item) {
           return {
-            decrement: Number(item.decrement),
+            amount: Number(item.decrement),
             id: item.product.id,
-            name: item.product.name,
-            inStock: item.product.amount
+            name: item.product.name
+            // inStock: item.product.amount
           }
         })
         let form = _.clone(this.form)
@@ -84,9 +84,8 @@
           .catch(e => {
             EventBus.$emit('SHOW_MESSAGE', {
               color: 'error',
-              message: 'Por favor revise los errores del formulario'
+              message: e.response.data.error.message
             })
-            console.log(e)
           })
           .then(() => {
             this.btnLoading = false
@@ -100,10 +99,10 @@
       },
       availableMessage (i) {
         let amount = this.form.products[i].product.amount
-        return amount ? `${amount} disponibles` : ''
+        return `${amount || 0} disponibles`
       },
       findProducts (q) {
-        this.$http.get(`/products/search?q=${q}&fields=id,name,amount&store=${this.form.store}`)
+        this.$http.get(`/products/search?q=${q}&searchType=combo`)
           .then(response => {
             this.productList = response.data
           })

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <p class="headline">Ultimos movimientos</p> 
-    <v-data-table disable-initial-sort="true" :headers="headers" :items="items" :loading="loading" hide-actions class="elevation-1">
+    <v-data-table :disable-initial-sort="true" :headers="headers" :items="items" :loading="loading" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.user }}</td>
         <td class="text-xs-left">

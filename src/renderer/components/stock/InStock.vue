@@ -18,9 +18,9 @@
     </v-form>
     <v-data-table :headers="headers" :loading="loading" :items="items" hide-actions class="elevation-1">
       <template slot="items" slot-scope="prod">
-        <td class="text-xs-left">{{ prod.item.name }}</td>
-        <td class="text-xs-left">{{ prod.item.provider.name }}</td>
-        <td class="text-xs-left">{{ prod.item.store.name }}</td>
+        <td class="text-xs-left">{{ prod.item.product }}</td>
+        <td class="text-xs-left">{{ prod.item.provider }}</td>
+        <td class="text-xs-left">{{ prod.item.store }}</td>
         <td class="text-xs-left">{{ prod.item.amount }}</td>
       </template>
     </v-data-table>
@@ -49,7 +49,7 @@
       search: function () {
         this.items = []
         this.loading = true
-        this.$http.get(`/products/search?q=${this.form.product}&relations`)
+        this.$http.get(`/products/search?q=${this.form.product}&searchType=inStock`)
           .then(response => {
             this.items = response.data
           })
