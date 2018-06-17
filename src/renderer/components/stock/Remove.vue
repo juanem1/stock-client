@@ -11,7 +11,7 @@
         </v-flex>
         <v-flex d-flex sm12 v-for="(product, i) in form.products" :key="i">
           <v-layout row wrap>
-            <v-flex class="pr-3" sm8>
+            <v-flex sm8 class="pr-3">
               <v-select :items="productList" :hint="availableMessage(i)" persistent-hint :search-input.sync="searchProducts" v-model="form.products[i].product" label="Producto" item-text="name" item-value="id" combobox required></v-select>
             </v-flex>
             <v-flex sm3>
@@ -19,10 +19,10 @@
             </v-flex>
             <v-flex sm1 class="text-xs-right">
               <v-tooltip left>
-                <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>highlight_off</v-icon></v-btn>
+                <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>clear</v-icon></v-btn>
                 <span>Quitar este producto</span>
               </v-tooltip>
-            </v-flex>  
+            </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
