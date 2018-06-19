@@ -21,17 +21,14 @@
           </v-flex>
         </v-layout>
       </v-container>
-      <v-snackbar :timeout="5000" color="error" v-model="snackbar">
-        {{ message }}
-        <v-btn dark flat @click.native="snackbar = false">
-          <v-icon>close</v-icon>
-        </v-btn>
-      </v-snackbar>
+      <messages></messages>
     </v-content>
   </v-app>
 </template>
 
 <script>
+  import EventBus from './event-bus'
+  import messages from './Messages'
   export default {
     name: 'login-page',
     data: function () {
@@ -50,19 +47,21 @@
             v => v.length >= 6 || 'La contraseña debe ser de al menos 6 caracteres'
           ]
         },
-        message: '',
-        snackbar: false,
         btnLoading: false
       }
+    },
+    components: {
+      messages
     },
     methods: {
       onSubmit: function () {
         if (!this.$refs.form.validate()) {
-          this.message = 'Todos los errores deben ser resueltos'
-          this.snackbar = true
+          EventBus.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Todos los errores deben ser resueltos'
+          })
           return
         }
-        let that = this
         this.btnLoading = true
         this.$http.post('/login', this.form)
           .then(response => {
@@ -76,11 +75,15 @@
           })
           .catch(error => {
             if (error.response.status === 401) {
-              that.message = 'Usuario o contraseña incorrecto'
-              that.snackbar = true
+              EventBus.$emit('SHOW_MESSAGE', {
+                color: 'error',
+                message: 'Usuario o contraseña incorrecto'
+              })
             } else {
-              that.message = error.response.data.errors.email + error.response.data.errors.password
-              that.snackbar = true
+              EventBus.$emit('SHOW_MESSAGE', {
+                color: 'error',
+                message: 'Error al intentar loguarse, por favor intente en unos minutos'
+              })
             }
           })
           .then(() => {
@@ -90,6 +93,3 @@
     }
   }
 </script>
-
-<style>
-</style>

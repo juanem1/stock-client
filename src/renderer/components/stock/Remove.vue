@@ -102,7 +102,7 @@
         return `${amount || 0} disponibles`
       },
       findProducts (q) {
-        this.$http.get(`/products/search?q=${q}&searchType=combo`)
+        this.$http.get(`/products/search?q=${q}&searchType=combo&store=${this.form.store}`)
           .then(response => {
             this.productList = response.data
           })
