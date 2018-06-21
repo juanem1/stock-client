@@ -23,7 +23,7 @@
               <!--v-list-tile @click="showVoucher(props.item)">
                 <v-list-tile-title>Imprimir remito</v-list-tile-title>
               </v-list-tile-->
-              <v-list-tile @click="showModal(props.item)">
+              <v-list-tile @click="modalDetails = props.item">
                 <v-list-tile-title>Ver orden</v-list-tile-title>
               </v-list-tile>
             </v-list>
@@ -36,25 +36,12 @@
         <v-icon>add</v-icon>
       </v-btn>
     </v-fab-transition>
-    <v-dialog v-model="isModalOpen" persistent max-width="60%">
-      <v-card>
-        <v-card-title class="headline">Orden de {{modalDetails.action}}</v-card-title>
-        <v-card-text>
-          <v-progress-linear v-if="loadingDetails" height="3" indeterminate color="primary"></v-progress-linear>
-
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" outline @click.native="showVoucher(modalDetails)">Imprimir remito</v-btn>
-          <v-btn color="green darken-2" outline @click.native="isModalOpen = false">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <order-details :data="modalDetails"></order-details>
   </v-container>
 </template>
 
 <script>
-  import Voucher from '../voucher'
+  import orderDetails from '../orderDetails/modal'
   export default {
     name: 'activity-page',
     data: function () {
@@ -70,10 +57,11 @@
         ],
         items: [],
         loading: true,
-        isModalOpen: false,
-        loadingDetails: false,
         modalDetails: {}
       }
+    },
+    components: {
+      orderDetails
     },
     methods: {
       chipColor (action) {
@@ -91,21 +79,6 @@
           Salida: 'arrow_downward'
         }
         return arrows[action]
-      },
-      showVoucher (item) {
-        Voucher.open(this.$store.state.User.apiToken, item.id)
-      },
-      showModal (item) {
-        this.modalDetails = item
-        this.loadingDetails = true
-        this.isModalOpen = true
-        this.$http.get(`/orders/${item.id}`)
-          .then(response => {
-            this.modalDetails = response
-          })
-          .then(response => {
-            this.loadingDetails = false
-          })
       }
     },
     mounted: function () {
