@@ -27,7 +27,7 @@
           <span>Salir del sistema</span>
         </v-tooltip>
       </v-toolbar>
-      <v-container fluid fill-height>
+      <v-container>
         <v-layout>
           <v-flex>
             <router-view></router-view>

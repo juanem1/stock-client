@@ -110,7 +110,7 @@
           .then(response => {
             EventBus.$emit('SHOW_MESSAGE', {
               color: 'success',
-              message: 'El stock se agrego con éxito!'
+              message: 'El stock se transfirio con éxito!'
             })
             this.$router.push('/l/stock/activity')
           })
