@@ -4,7 +4,7 @@
       <v-btn class="ml-0" flat icon to="/l/stock/activity"><v-icon>arrow_back</v-icon></v-btn>
       Productos en existencia
     </p>
-    <v-form ref="form" :model="form" class="mb-2" lazy-validation>
+    <v-form class="mb-2" ref="form" :model="form" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
         <v-flex class="pr-3" sm10>
           <v-text-field prepend-icon="search" v-model="form.product" label="Buscar producto" class="elevation-1" solo required></v-text-field>
