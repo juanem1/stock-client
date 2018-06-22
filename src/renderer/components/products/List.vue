@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="headline">Productos</p>
-    <v-form ref="form" :model="form" class="mb-2" lazy-validation>
+    <v-form v-if="false" ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
         <v-flex class="pr-3" sm10>
           <v-text-field prepend-icon="search" v-model="form.product" label="Buscar producto" class="elevation-1" solo required></v-text-field>
@@ -55,6 +55,9 @@
     methods: {
       editProduct (productId) {
         this.$router.push(`/l/products/${productId}/edit`)
+      },
+      search () {
+        console.log()
       }
     },
     mounted: function () {
