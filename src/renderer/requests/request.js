@@ -1,8 +1,6 @@
 'use strict'
 
-class Request {
-
-  
+/* class Request {
 }
 
-export default new Request()
+export default new Request() */
