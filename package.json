@@ -1,8 +1,8 @@
 {
-  "name": "stock",
+  "name": "stock-client",
   "version": "0.0.1",
   "author": "Juan Emilio Turk <juanemilioturk@gmail.com>",
-  "description": "An electron-vue project",
+  "description": "Stock controll for Layun Feria company",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -21,8 +21,8 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "stock",
-    "appId": "org.simulatedgreg.electron-vue",
+    "productName": "stock-client",
+    "appId": "com.layun.feria",
     "directories": {
       "output": "build"
     },
