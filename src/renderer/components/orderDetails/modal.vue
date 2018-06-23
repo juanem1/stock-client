@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isOpen" max-width="60%">
+  <v-dialog v-model="open" max-width="60%" persistent>
     <v-card>
       <v-card-title v-if="!loading" class="headline">Orden de {{details.orderType}}</v-card-title>
       <v-card-text>
@@ -32,7 +32,7 @@
       <v-card-actions v-if="!loading">
         <v-spacer></v-spacer>
         <v-btn color="green darken-1" outline @click.native="showVoucher(details)">Imprimir remito</v-btn>
-        <v-btn color="green darken-2" outline @click.native="isOpen = false">Cerrar</v-btn>
+        <v-btn color="green darken-2" outline @click.native="close()">Cerrar</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -44,16 +44,17 @@
     data: function () {
       return {
         details: {},
-        loading: true,
-        isOpen: false
+        loading: true
       }
     },
-    props: ['data'],
+    props: ['data', 'open'],
     watch: {
-      data (item) {
+      open () {
+        if (!this.open) {
+          return
+        }
         this.loading = true
-        this.isOpen = true
-        this.$http.get(`/orders/${item.id}`)
+        this.$http.get(`/orders/${this.data.id}`)
           .then(response => {
             this.details = response.data
           })
@@ -63,6 +64,9 @@
       }
     },
     methods: {
+      close () {
+        this.$emit('close')
+      },
       showVoucher (item) {
         let { BrowserWindow } = this.$electron.remote
         let voucherWindow = new BrowserWindow({width: 800, height: 600})

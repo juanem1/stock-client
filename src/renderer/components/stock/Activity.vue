@@ -27,7 +27,7 @@
               <v-icon color="grey">more_vert</v-icon>
             </v-btn>
             <v-list>
-              <v-list-tile @click="modalDetails = props.item">
+              <v-list-tile @click="openModal(props.item)">
                 <v-list-tile-title>Ver orden</v-list-tile-title>
               </v-list-tile>
             </v-list>
@@ -40,7 +40,7 @@
         <v-icon>add</v-icon>
       </v-btn>
     </v-fab-transition>
-    <order-details :data="modalDetails"></order-details>
+    <order-details :open="showModal" :data="modalDetails" @close="showModal = false"></order-details>
   </v-container>
 </template>
 
@@ -61,7 +61,8 @@
         ],
         items: [],
         loading: true,
-        modalDetails: {}
+        modalDetails: {},
+        showModal: false
       }
     },
     components: {
@@ -83,6 +84,10 @@
           Salida: 'arrow_downward'
         }
         return arrows[action]
+      },
+      openModal (item) {
+        this.modalDetails = item
+        this.showModal = true
       }
     },
     mounted: function () {
