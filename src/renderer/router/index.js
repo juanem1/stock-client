@@ -58,9 +58,6 @@ export default new Router({
           component: require('@/components/stores/Edit').default
         }
       ]
-    }, {
-      path: '/logout',
-      component: require('@/components/LogoutPage').default
     }/*, {
      path: '*',
      redirect: '/'
