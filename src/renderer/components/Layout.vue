@@ -38,7 +38,7 @@
         
         <v-tooltip bottom>
           <v-btn slot="activator" to="/logout" icon><v-icon>exit_to_app</v-icon></v-btn>
-          <span>Salir del sistema</span>
+          <span>Cerrar sesion</span>
         </v-tooltip>
       </v-toolbar>
       <v-container>
