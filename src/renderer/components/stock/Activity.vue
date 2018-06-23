@@ -27,9 +27,6 @@
               <v-icon color="grey">more_vert</v-icon>
             </v-btn>
             <v-list>
-              <!--v-list-tile @click="showVoucher(props.item)">
-                <v-list-tile-title>Imprimir remito</v-list-tile-title>
-              </v-list-tile-->
               <v-list-tile @click="modalDetails = props.item">
                 <v-list-tile-title>Ver orden</v-list-tile-title>
               </v-list-tile>

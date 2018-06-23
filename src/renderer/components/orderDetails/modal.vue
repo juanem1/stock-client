@@ -39,7 +39,6 @@
 </template>
 
 <script>
-  import Voucher from '../voucher'
   export default {
     name: 'order-details',
     data: function () {
@@ -65,7 +64,12 @@
     },
     methods: {
       showVoucher (item) {
-        Voucher.open(this.$store.state.User.apiToken, item.id)
+        let { BrowserWindow } = this.$electron.remote
+        let voucherWindow = new BrowserWindow({width: 800, height: 600})
+        voucherWindow.on('closed', () => {
+          voucherWindow = null
+        })
+        voucherWindow.loadURL(`${this.$http.defaults.baseURL}/voucher?api_token=${this.$store.state.User.apiToken}&id=${item.id}`)
       }
     }
   }
