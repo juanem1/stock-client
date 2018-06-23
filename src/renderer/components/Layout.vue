@@ -22,6 +22,17 @@
         </v-btn>
         <v-toolbar-title>{{company}}</v-toolbar-title>
         <v-spacer></v-spacer>
+
+        <v-tooltip bottom>
+          <v-btn slot="activator" icon :disabled="updateDisabled" @click.native.stop="installUpdate()">
+            <v-badge color="red" v-model="showBadge" left>
+              <span slot="badge">!</span>
+              <v-icon>update</v-icon>
+            </v-badge>
+          </v-btn>
+          <span>Actualizar sistema</span>
+        </v-tooltip>
+        
         <v-tooltip bottom>
           <v-btn slot="activator" to="/logout" icon><v-icon>exit_to_app</v-icon></v-btn>
           <span>Salir del sistema</span>
@@ -42,23 +53,39 @@
 <script>
   import stkMenu from './StkMenu'
   import messages from './Messages'
+  
   export default {
     name: 'layout',
     data: function () {
       return {
         drawer: null,
         userName: this.$store.state.User.name,
-        company: this.$store.state.User.company
+        company: this.$store.state.User.company,
+        updateDisabled: true
       }
     },
     components: {stkMenu, messages},
     props: {
       source: String
     },
+    computed: {
+      showBadge: function () {
+        return !this.updateDisabled
+      }
+    },
+    methods: {
+      installUpdate: function () {
+        this.$electron.ipcRenderer.send('quitAndInstall')
+      }
+    },
     mounted: function () {
       if (this.$store.state.User.apiToken == null) {
         this.$router.push('/')
       }
+      // If there is a new update
+      this.$electron.ipcRenderer.on('updateReady', (event, data) => {
+        this.updateDisabled = false
+      })
     }
   }
 </script>

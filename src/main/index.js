@@ -1,8 +1,9 @@
 'use strict'
 
 import electron from 'electron'
-const { app, BrowserWindow } = electron
+import { autoUpdater } from 'electron-updater'
 
+const { app, BrowserWindow, ipcMain } = electron
 const isDev = process.env.NODE_ENV === 'development'
 
 /**
@@ -70,15 +71,16 @@ app.on('window-all-closed', () => {
  * support auto updating. Code Signing with a valid certificate is required.
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
 autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('updateReady')
+})
+
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on('checkForUpdates', (event, arg) => {
+  if (!isDev) autoUpdater.checkForUpdates()
+})
+
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on('quitAndInstall', (event, arg) => {
   autoUpdater.quitAndInstall()
 })
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */

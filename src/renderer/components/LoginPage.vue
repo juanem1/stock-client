@@ -67,10 +67,14 @@
           .then(response => {
             // save user in the store
             this.$store.commit('SET_USER', response.data)
+            // Set headers for next request
             this.$http.defaults.headers.common = {
               'X-Requested-With': 'XMLHttpRequest',
               'Authorization': `Bearer ${response.data.api_token}`
             }
+            // Check for updates
+            this.$electron.ipcRenderer.send('checkForUpdates')
+            // Redirect to home page
             this.$router.push('/l/stock/activity')
           })
           .catch(error => {
