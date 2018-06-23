@@ -52,7 +52,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <v-btn color="success" :loading="submitLoading" @click="onSubmit">Trasnferir</v-btn>
+      <v-btn class="ml-0" color="success" :loading="submitLoading" @click="onSubmit">Trasnferir</v-btn>
     </v-form>
   </v-container>
 </template>

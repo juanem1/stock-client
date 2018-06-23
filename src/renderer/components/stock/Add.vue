@@ -29,7 +29,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <v-btn color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
+      <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
       <v-btn color="info" @click="addProduct">Agregar producto
         <v-icon>add</v-icon>
       </v-btn>
