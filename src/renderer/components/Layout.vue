@@ -37,7 +37,9 @@
         </v-tooltip>
         
         <v-tooltip bottom>
-          <v-btn slot="activator" to="/logout" icon><v-icon>exit_to_app</v-icon></v-btn>
+          <v-btn slot="activator" icon @click.native.stop="logout()">
+            <v-icon>exit_to_app</v-icon>
+          </v-btn>
           <span>Cerrar sesion</span>
         </v-tooltip>
       </v-toolbar>
@@ -82,6 +84,14 @@
     methods: {
       installUpdate: function () {
         this.$electron.ipcRenderer.send('quitAndInstall')
+      },
+      logout: function () {
+        this.$store.commit('DELETE_USER')
+        this.$http.defaults.headers.common = {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Authorization': ''
+        }
+        this.$router.push('/')
       }
     },
     mounted: function () {
