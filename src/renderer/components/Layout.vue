@@ -17,9 +17,12 @@
     </v-navigation-drawer>
     <v-content>
       <v-toolbar color="primary" dark>
-        <v-btn v-bind:class="{rotate: !drawer}" icon @click.native.stop="drawer = !drawer">
-          <v-icon>chevron_left</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <v-btn slot="activator" v-bind:class="{rotate: !drawer}" icon @click.native.stop="drawer = !drawer">
+            <v-icon>chevron_left</v-icon>
+          </v-btn>
+          <span>{{hideMenuTooltip}}</span>
+        </v-tooltip>
         <v-toolbar-title>{{company}}</v-toolbar-title>
         <v-spacer></v-spacer>
 
@@ -58,7 +61,7 @@
     name: 'layout',
     data: function () {
       return {
-        drawer: null,
+        drawer: true,
         userName: this.$store.state.User.name,
         company: this.$store.state.User.company,
         updateDisabled: true
@@ -71,6 +74,9 @@
     computed: {
       showBadge: function () {
         return !this.updateDisabled
+      },
+      hideMenuTooltip: function () {
+        return this.drawer ? 'Ocultar menu' : 'Mostrar menu'
       }
     },
     methods: {
