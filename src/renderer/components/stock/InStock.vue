@@ -7,7 +7,12 @@
     <v-form class="mb-2" ref="form" :model="form" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
         <v-flex class="pr-3" sm10>
-          <v-text-field prepend-icon="search" v-model="form.product" label="Buscar producto" class="elevation-1" solo required></v-text-field>
+          <v-text-field 
+            v-model="form.product"
+            :rules="rules.product"
+            label="Buscar producto"
+            required>
+          </v-text-field>
         </v-flex>
         <v-flex sm2>
           <v-btn block color="primary" @click="search">
@@ -16,7 +21,13 @@
         </v-flex>
       </v-layout>
     </v-form>
-    <v-data-table :headers="headers" :loading="loading" :items="items" hide-actions class="elevation-1">
+    <v-data-table 
+      :headers="headers" 
+      :loading="loading" 
+      :items="items" 
+      no-data-text="No hay productos para mostrar"
+      hide-actions 
+      class="elevation-1">
       <template slot="items" slot-scope="prod">
         <td class="text-xs-left">{{ prod.item.product }}</td>
         <td class="text-xs-left">{{ prod.item.provider }}</td>
@@ -35,6 +46,9 @@
         form: {
           product: ''
         },
+        rules: {
+          product: [v => !!v || 'Ingrese el nombre o parte del nombre de un producto']
+        },
         loading: false,
         headers: [
           { text: 'Producto', value: 'name' },
@@ -47,6 +61,9 @@
     },
     methods: {
       search: function () {
+        if (!this.$refs.form.validate()) {
+          return
+        }
         this.items = []
         this.loading = true
         this.$http.get(`/products/search?q=${this.form.product}&searchType=inStock`)

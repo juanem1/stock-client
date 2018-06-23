@@ -1,10 +1,15 @@
 <template>
   <div>
     <p class="headline">Productos</p>
-    <v-form v-if="false" ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
+    <v-form ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
         <v-flex class="pr-3" sm10>
-          <v-text-field prepend-icon="search" v-model="form.product" label="Buscar producto" class="elevation-1" solo required></v-text-field>
+          <v-text-field 
+            v-model="form.product" 
+            label="Buscar producto" 
+            :rules="rules.product"
+            required>
+          </v-text-field>
         </v-flex>
         <v-flex sm2>
           <v-btn block color="primary" @click="search">
@@ -13,7 +18,13 @@
         </v-flex>
       </v-layout>
     </v-form>
-    <v-data-table :headers="headers" :loading="loading" :items="items" hide-actions class="elevation-1">
+    <v-data-table 
+      :headers="headers" 
+      :loading="loading" 
+      :items="items" 
+      no-data-text="No hay productos para mostrar"
+      hide-actions 
+      class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.provider }}</td>
@@ -48,6 +59,9 @@
         items: [],
         form: {
           product: ''
+        },
+        rules: {
+          product: [v => !!v || 'Ingrese el nombre o parte del nombre de un producto']
         },
         loading: true
       }
