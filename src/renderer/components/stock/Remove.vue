@@ -17,9 +17,11 @@
             <v-flex sm3>
               <v-text-field v-model="form.products[i].decrement" label="Cantidad" mask="#######" required></v-text-field>
             </v-flex>
-            <v-flex sm1 class="text-xs-right">
+            <v-flex sm1 class="text-xs-right" v-if="form.products.length > 1">
               <v-tooltip left>
-                <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>clear</v-icon></v-btn>
+                <v-btn slot="activator" @click="removeProduct(i)" icon>
+                  <v-icon>clear</v-icon>
+                </v-btn>
                 <span>Quitar este producto</span>
               </v-tooltip>
             </v-flex>

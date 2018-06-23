@@ -43,7 +43,7 @@
                 required>
               </v-text-field>
             </v-flex>
-            <v-flex sm1 class="text-xs-right">
+            <v-flex sm1 class="text-xs-right" v-if="form.products.length > 1">
               <v-tooltip left>
                 <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>clear</v-icon></v-btn>
                 <span>Quitar este producto</span>
@@ -53,6 +53,9 @@
         </v-flex>
       </v-layout>
       <v-btn class="ml-0" color="success" :loading="submitLoading" @click="onSubmit">Trasnferir</v-btn>
+      <v-btn color="info" @click="addProduct">Agregar producto
+        <v-icon>add</v-icon>
+      </v-btn>
     </v-form>
   </v-container>
 </template>
@@ -127,6 +130,9 @@
       availableMessage (i) {
         let amount = this.form.products[i].product.amount
         return `${amount || 0} disponibles`
+      },
+      addProduct () {
+        this.form.products.push({product: '', amount: ''})
       },
       removeProduct (i) {
         this.form.products.splice(i, 1)

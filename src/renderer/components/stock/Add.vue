@@ -20,12 +20,18 @@
         </v-flex-->
         <v-flex d-flex sm12 v-for="(product, i) in form.products" :key="i">
           <v-layout row wrap>
-            <v-flex class="pr-3" sm9>
+            <v-flex class="pr-3" sm8>
               <v-select :items="productList" :hint="`${form.products[i].product.amount} disponibles`" persistent-hint :search-input.sync="searchProducts" v-model="form.products[i].product" label="Producto" item-text="name" item-value="id" autocomplete combobox required></v-select>
             </v-flex>
             <v-flex sm3>
               <v-text-field v-model="form.products[i].amount" label="Cantidad" mask="#######" required></v-text-field>
-            </v-flex>  
+            </v-flex>
+            <v-flex sm1 class="text-xs-right" v-if="form.products.length > 1">
+              <v-tooltip left>
+                <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>clear</v-icon></v-btn>
+                <span>Quitar este producto</span>
+              </v-tooltip>
+            </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
@@ -109,18 +115,8 @@
       addProduct () {
         this.form.products.push({product: '', amount: ''})
       },
-      findProviders (q) {
-        /* this.loadingProviders = true
-        this.$http.get(`/providers/search&q=${q}&combo`)
-          .then(response => {
-            zthis.providers = response.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          .then(() => {
-            this.loadingProviders = false
-          }) */
+      removeProduct (i) {
+        this.form.products.splice(i, 1)
       },
       findProducts (q) {
         // this.loadingProviders = true
