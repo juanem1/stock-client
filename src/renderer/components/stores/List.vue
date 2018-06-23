@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <p class="headline">Depositos</p> 
     <v-data-table :headers="headers" :loading="loading" :items="items" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">
@@ -18,7 +18,7 @@
         <v-icon>add</v-icon>
       </v-btn>
     </v-fab-transition>
-  </div>
+  </v-container>
 </template>
 
 <script>

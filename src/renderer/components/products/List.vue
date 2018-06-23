@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <p class="headline">Productos</p>
     <v-form ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
@@ -42,7 +42,7 @@
         <v-icon>add</v-icon>
       </v-btn>
     </v-fab-transition>
-  </div>
+  </v-container>
 </template>
 
 <script>
