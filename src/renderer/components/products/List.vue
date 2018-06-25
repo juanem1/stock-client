@@ -79,7 +79,7 @@
         .then(response => {
           this.items = response.data
         })
-        .catch(error => {
+        .catch(() => {
           this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Error al cargar los productos'

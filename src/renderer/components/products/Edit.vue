@@ -102,11 +102,11 @@
           this.form.provider = response.data.provider
           this.form.description = response.data.description
         })
-        .catch(error => {
+        .catch(() => {
           this.$messages.$emit('SHOW_MESSAGE', {
-              color: 'error',
-              message: 'Error al cargar el producto seleccionado'
-            })
+            color: 'error',
+            message: 'Error al cargar el producto seleccionado'
+          })
         })
         .then(() => {
           this.formLoading = false
