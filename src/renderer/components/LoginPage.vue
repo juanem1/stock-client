@@ -27,15 +27,14 @@
 </template>
 
 <script>
-  import EventBus from './event-bus'
   import messages from './Messages'
   export default {
     name: 'login-page',
     data: function () {
       return {
         form: {
-          email: 'cbosco@example.org',
-          password: 'secret'
+          email: process.env.NODE_ENV === 'development' ? 'cbosco@example.org' : '',
+          password: process.env.NODE_ENV === 'development' ? 'secret' : ''
         },
         rules: {
           email: [
@@ -56,7 +55,7 @@
     methods: {
       onSubmit: function () {
         if (!this.$refs.form.validate()) {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Todos los errores deben ser resueltos'
           })
@@ -79,12 +78,12 @@
           })
           .catch(error => {
             if (error.response.status === 401) {
-              EventBus.$emit('SHOW_MESSAGE', {
+              this.$messages.$emit('SHOW_MESSAGE', {
                 color: 'error',
                 message: 'Usuario o contraseña incorrecto'
               })
             } else {
-              EventBus.$emit('SHOW_MESSAGE', {
+              this.$messages.$emit('SHOW_MESSAGE', {
                 color: 'error',
                 message: 'Error al intentar loguarse, por favor intente en unos minutos'
               })
