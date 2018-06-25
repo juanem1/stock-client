@@ -18,7 +18,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   export default {
     name: 'add-product',
     data: function () {
@@ -42,7 +41,7 @@
     methods: {
       onSubmit () {
         if (!this.$refs.form.validate()) {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Todos los errores deben ser resueltos'
           })
@@ -51,14 +50,14 @@
         this.btnLoading = true
         this.$http.post('/products', this.form)
           .then(response => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: 'El producto se guardo correctamente'
             })
             this.$router.push('/l/products')
           })
           .catch(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: 'Hubo un error al guardar los datos'
             })

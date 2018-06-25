@@ -19,7 +19,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   export default {
     name: 'edit-provider',
     data: function () {
@@ -40,7 +39,7 @@
     methods: {
       onSubmit () {
         if (!this.$refs.form.validate()) {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Todos los errores deben ser resueltos'
           })
@@ -49,14 +48,14 @@
         this.btnLoading = true
         this.$http.patch(`/providers/${this.$route.params.id}`, this.form)
           .then(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: 'Los cambios se guardaron con exito'
             })
             this.$router.push('/l/providers')
           })
           .catch(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: 'Error al guardar los cambios'
             })

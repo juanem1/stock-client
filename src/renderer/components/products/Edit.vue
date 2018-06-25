@@ -31,7 +31,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   export default {
     name: 'edit-product',
     data: function () {
@@ -55,7 +54,7 @@
     methods: {
       onSubmit () {
         if (!this.$refs.form.validate()) {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Todos los errores deben ser resueltos'
           })
@@ -64,14 +63,14 @@
         this.btnLoading = true
         this.$http.patch(`/products/${this.$route.params.id}`, this.form)
           .then(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: 'Los cambios se guardaron con exito!'
             })
             this.$router.push('/l/products')
           })
           .catch(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: 'Error al guardar los cambios'
             })
@@ -85,7 +84,7 @@
         this.confirm = false
         // ajax delete
         setTimeout(() => {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'success',
             message: 'El producto se elimino con exito!'
           })
@@ -104,7 +103,10 @@
           this.form.description = response.data.description
         })
         .catch(error => {
-          this.message = error.response.data.errors.email + error.response.data.errors.password
+          this.$messages.$emit('SHOW_MESSAGE', {
+              color: 'error',
+              message: 'Error al cargar el producto seleccionado'
+            })
         })
         .then(() => {
           this.formLoading = false

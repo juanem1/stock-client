@@ -44,7 +44,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   import _ from 'lodash'
   export default {
     name: 'add-stock',
@@ -95,14 +94,14 @@
         form.products = formated
         this.$http.post('/orders', form)
           .then(response => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: 'El stock se agrego con éxito!'
             })
             this.$router.push('/l/stock/activity')
           })
           .catch(e => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: 'Por favor revise los errores del formulario'
             })

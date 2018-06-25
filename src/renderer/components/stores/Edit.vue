@@ -30,7 +30,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   export default {
     name: 'edit-store',
     data: function () {
@@ -53,7 +52,7 @@
     methods: {
       onSubmit () {
         if (!this.$refs.form.validate()) {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Todos los errores deben ser resueltos'
           })
@@ -62,14 +61,14 @@
         this.btnLoading = true
         this.$http.patch(`/stores/${this.$route.params.id}`, this.form)
           .then(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: 'Los cambios se guardaron con exito!'
             })
             this.$router.push('/l/stores')
           })
           .catch(() => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: 'Error al guardar los cambios'
             })
@@ -83,7 +82,7 @@
         this.confirm = false
         // ajax delete
         setTimeout(() => {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'success',
             message: 'El deposito se elimino con exito!'
           })

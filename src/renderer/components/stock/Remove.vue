@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   import _ from 'lodash'
   export default {
     name: 'remove-stock',
@@ -77,14 +76,14 @@
 
         this.$http.post('/orders', form)
           .then(response => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
               message: response.data.message
             })
             this.$router.push('/l/stock/activity')
           })
           .catch(e => {
-            EventBus.$emit('SHOW_MESSAGE', {
+            this.$messages.$emit('SHOW_MESSAGE', {
               color: 'error',
               message: e.response.data.error.message
             })
@@ -123,7 +122,7 @@
           this.stores = response.data
         })
         .catch(e => {
-          EventBus.$emit('SHOW_MESSAGE', {
+          this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
             message: 'Se produjo un error al intentar cargar los depositos'
           })

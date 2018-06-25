@@ -8,12 +8,16 @@ import store from './store'
 import Vuetify from 'vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify/dist/vuetify.min.css'
-// import './fontawesome-icons'
+
+import Messages from './messages'
 
 axios.defaults.baseURL = 'http://stock-server.test/api'
 axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest'
 }
+
+// Send messages between components
+Vue.prototype.$messages = Messages
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

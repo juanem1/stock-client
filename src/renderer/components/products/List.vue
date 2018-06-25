@@ -80,7 +80,10 @@
           this.items = response.data
         })
         .catch(error => {
-          this.message = error.response.data.errors.email + error.response.data.errors.password
+          this.$messages.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Error al cargar los productos'
+          })
         })
         .then(() => {
           this.loading = false

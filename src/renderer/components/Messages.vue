@@ -8,7 +8,8 @@
 </template>
 
 <script>
-  import EventBus from './event-bus'
+  import Messages from '../messages'
+
   export default {
     name: 'messages',
     data: function () {
@@ -19,7 +20,7 @@
       }
     },
     mounted: function () {
-      EventBus.$on('SHOW_MESSAGE', (msg) => {
+      Messages.$on('SHOW_MESSAGE', (msg) => {
         this.snackbarColor = msg.color
         this.snackbarMessage = msg.message
         this.snackbar = true
