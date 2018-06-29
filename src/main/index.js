@@ -1,5 +1,6 @@
 'use strict'
 
+import fs from 'fs'
 import electron from 'electron'
 import { autoUpdater } from 'electron-updater'
 
@@ -12,6 +13,10 @@ const isDev = process.env.NODE_ENV === 'development'
  */
 if (!isDev) {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+}
+
+if (!fs.existsSync('./src/renderer/config.js')) {
+  fs.writeFileSync('./src/renderer/config.js', `export default {path: 'https://${process.env.ENDPOINT}/api'}\n`)
 }
 
 let mainWindow
