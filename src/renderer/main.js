@@ -10,9 +10,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify/dist/vuetify.min.css'
 
 import Messages from './messages'
-import Config from './config'
 
-axios.defaults.baseURL = Config.path
 axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest'
 }
