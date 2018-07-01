@@ -28,6 +28,8 @@
 
 <script>
   import messages from './Messages'
+  import cache from '../cache'
+
   export default {
     name: 'login-page',
     data: function () {
@@ -92,6 +94,13 @@
           .then(() => {
             this.btnLoading = false
           })
+      }
+    },
+    beforeMount: function () {
+      if (!cache.has('endpoint')) {
+        this.$router.push('/endpoint')
+      } else {
+        this.$http.defaults.baseURL = cache.get('endpoint')
       }
     }
   }

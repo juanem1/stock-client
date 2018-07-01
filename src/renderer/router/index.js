@@ -10,6 +10,10 @@ export default new Router({
       name: 'login-page',
       component: require('@/components/LoginPage').default
     }, {
+      path: '/endpoint',
+      name: 'endpoint-page',
+      component: require('@/components/Endpoint').default
+    }, {
       path: '/l',
       name: 'layout',
       component: require('@/components/Layout').default,
