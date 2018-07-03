@@ -80,5 +80,5 @@
 </script>
 
 <style>
-.card.card--flat {border: 1px solid rgba(0,0,0,.12);}
+.v-card.v-card--flat {border: 1px solid rgba(0,0,0,.12);}
 </style>
