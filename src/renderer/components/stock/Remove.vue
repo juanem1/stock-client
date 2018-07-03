@@ -4,18 +4,21 @@
       <v-btn class="ml-0" flat icon to="/l/stock/activity"><v-icon>arrow_back</v-icon></v-btn>
       Salida de stock
     </p>
-    <v-form>
+    <v-form v-model="frmValid">
       <v-layout row wrap>
         <v-flex sm12>
           <v-select :loading="loadingStores" :items="stores" v-model="form.store" label="De deposito" item-text="name" item-value="id" required></v-select>
         </v-flex>
         <v-flex d-flex sm12 v-for="(product, i) in form.products" :key="i">
           <v-layout row wrap>
-            <v-flex sm8 class="pr-3">
-              <v-select :items="productList" :hint="availableMessage(i)" persistent-hint :search-input.sync="searchProducts" v-model="form.products[i].product" label="Producto" item-text="name" item-value="id" combobox required></v-select>
+            <v-flex sm7 class="pr-3">
+              <v-select v-model="form.products[i].product" :items="productList" :hint="availableMessage(i)" persistent-hint :search-input.sync="searchProducts" label="Producto" item-text="name" item-value="id" combobox required></v-select>
             </v-flex>
-            <v-flex sm3>
-              <v-text-field v-model="form.products[i].decrement" label="Cantidad" mask="#######" required></v-text-field>
+            <v-flex sm2 class="pr-3">
+              <v-text-field v-model="form.products[i].decrement" label="Cantidad" :rules="rules.amount" mask="#######" required></v-text-field>
+            </v-flex>
+            <v-flex sm2>
+              <v-text-field v-model="form.products[i].up" label="Precio unitario" :rules="rules.price" required></v-text-field>
             </v-flex>
             <v-flex sm1 class="text-xs-right" v-if="form.products.length > 1">
               <v-tooltip left>
@@ -42,12 +45,16 @@
     name: 'remove-stock',
     data: function () {
       return {
+        frmValid: true,
         form: {
           store: '',
           order_type: 2,
-          products: [{product: '', decrement: ''}]
+          products: [{product: '', decrement: '', up: 0}]
         },
-        rules: {},
+        rules: {
+          amount: [v => !!v || 'Ingrese una cantidad'],
+          price: [v => /^\d+(\.\d{1,2})?$/.test(v) || 'El precio deve tener el formato 000.00']
+        },
         loadingStores: false,
         btnLoading: false,
         stores: [],
@@ -62,13 +69,20 @@
     },
     methods: {
       onSubmit () {
+        if (!this.frmValid) {
+          this.$messages.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Todos los errores deben ser corregidos'
+          })
+          return
+        }
         this.btnLoading = true
         let formated = _.map(this.form.products, function (item) {
           return {
             amount: Number(item.decrement),
             id: item.product.id,
-            name: item.product.name
-            // inStock: item.product.amount
+            name: item.product.name,
+            unit_price: item.up
           }
         })
         let form = _.clone(this.form)
@@ -78,7 +92,7 @@
           .then(response => {
             this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
-              message: response.data.message
+              message: 'La orden se guardo con éxito'
             })
             this.$router.push('/l/stock/activity')
           })
@@ -93,7 +107,7 @@
           })
       },
       addProduct () {
-        this.form.products.push({product: '', decrement: ''})
+        this.form.products.push({product: '', decrement: '', up: 0})
       },
       removeProduct (i) {
         this.form.products.splice(i, 1)
