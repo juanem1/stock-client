@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <p class="headline">Depositos</p> 
     <v-data-table :headers="headers" :loading="loading" :items="items" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">

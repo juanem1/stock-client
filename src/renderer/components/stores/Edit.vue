@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <p class="headline">
       <v-btn class="ml-0" flat icon to="/l/stores"><v-icon>arrow_back</v-icon></v-btn>
       Editar deposito

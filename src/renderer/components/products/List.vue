@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <p class="headline">Productos</p>
     <v-form ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>

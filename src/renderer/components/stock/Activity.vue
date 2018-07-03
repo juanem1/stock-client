@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <p class="headline">Ultimos movimientos</p> 
     <v-data-table 
       :disable-initial-sort="true" 
