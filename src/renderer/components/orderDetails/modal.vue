@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="open" max-width="60%" persistent>
     <v-card>
-      <v-card-title v-if="!loading" class="headline">Orden de {{details.orderType}}</v-card-title>
+      <v-card-title v-if="!loading" class="headline grey lighten-2">
+        Orden de {{details.orderType}}
+      </v-card-title>
       <v-card-text>
         <div v-if="loading" style="text-align:center;">
           <v-progress-circular :size="70" :width="7" indeterminate color="primary"></v-progress-circular>
