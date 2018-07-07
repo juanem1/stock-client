@@ -4,63 +4,87 @@
       <v-btn class="ml-0" flat icon to="/l/stock/activity"><v-icon>arrow_back</v-icon></v-btn>
       Agregar stock
     </p>
-    <v-form>
-      <v-layout row wrap>
-        <v-flex class="pr-3" sm9>
-          <v-select :loading="loadingProviders" :items="providers" v-model="form.provider" label="Proveedor" item-text="name" item-value="id" required></v-select>
-        </v-flex>
-        <v-flex sm3>
-          <v-select :loading="loadingStores" :items="stores" v-model="form.store" label="Deposito" item-text="name" item-value="id" required></v-select>
-        </v-flex>
-        <!--v-flex class="pr-3" sm2>
-          <v-select :items="invoiceTypes" v-model="form.invoiceType" label="Tipo de factura" single-line></v-select>
-        </v-flex>
-        <v-flex sm10>
-          <v-text-field v-model="form.invoice" label="N de Factura" placeholder="0000-00000000" mask="####-########" required></v-text-field>
-        </v-flex-->
-        <v-flex d-flex sm12 v-for="(product, i) in form.products" :key="i">
-          <v-layout row wrap>
-            <v-flex class="pr-3" sm8>
-              <v-select :items="productList" :hint="`${form.products[i].product.amount} disponibles`" persistent-hint :search-input.sync="searchProducts" v-model="form.products[i].product" label="Producto" item-text="name" item-value="id" autocomplete combobox required></v-select>
+    <v-stepper v-model="step">
+      <v-stepper-header>
+        <v-stepper-step :complete="step > 1" step="1" editable>Seleccionar deposito</v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step :complete="step > 2" step="2">Agregar productos a la orden</v-stepper-step>
+      </v-stepper-header>
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-select box :loading="loadingStores" :items="stores" :return-object="true" v-model="store" label="Deposito" item-text="name" item-value="id" required></v-select>
+          <v-select box :loading="loadingProviders" :items="providers" :return-object="true" v-model="provider" label="Proveedor" item-text="name" item-value="id" required></v-select>
+          <v-btn class="ml-0" color="primary" @click="nextStep" :disabled="nextBtn">Siguiente <v-icon>arrow_forward</v-icon></v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="2">
+          <v-layout row wrap class="mb-3 px-1">
+            <v-flex class="pr-3" sm7>
+              <v-autocomplete :items="productList" :return-object="true" :search-input.sync="searchProducts" v-model="product" label="Producto" item-text="name" item-value="id" required></v-autocomplete>
             </v-flex>
-            <v-flex sm3>
-              <v-text-field v-model="form.products[i].amount" label="Cantidad" mask="#######" required></v-text-field>
+            <v-flex sm2>
+              <v-text-field v-model="amount" label="Cantidad" mask="#######" required></v-text-field>
             </v-flex>
-            <v-flex sm1 class="text-xs-right" v-if="form.products.length > 1">
-              <v-tooltip left>
-                <v-btn slot="activator" @click="removeProduct(i)" icon><v-icon>clear</v-icon></v-btn>
-                <span>Quitar este producto</span>
-              </v-tooltip>
+            <v-flex sm3 class="text-xs-right">
+              <v-btn color="info" @click="addProduct">Agregar producto
+                <v-icon>add</v-icon>
+              </v-btn>
             </v-flex>
           </v-layout>
-        </v-flex>
-      </v-layout>
-      <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
-      <v-btn color="info" @click="addProduct">Agregar producto
-        <v-icon>add</v-icon>
-      </v-btn>
-    </v-form>
+          <v-layout row wrap class="px-1">
+          <v-data-table 
+              :headers="headers" 
+              :items="table"
+              :light="true"
+              no-data-text="No hay productos para mostrar"
+              hide-actions 
+              class="elevation-1 flex grey lighten-2">
+              <template slot="items" slot-scope="prod">
+                <td class="text-xs-left">{{ prod.item.store }}</td>
+                <td class="text-xs-left">{{ prod.item.provider }}</td>
+                <td class="text-xs-left">{{ prod.item.product }}</td>
+                <td class="text-xs-left">{{ prod.item.amount }}</td>
+                <td class="justify-center layout px-0">
+                  <v-icon small @click="removeProduct(prod.item)">delete</v-icon>
+                </td>
+              </template>
+            </v-data-table>
+            <v-flex sm12>
+              <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </v-container>
 </template>
 
 <script>
-  import _ from 'lodash'
   export default {
     name: 'add-stock',
     data: function () {
       return {
-        // invoiceTypes: ['A', 'B', 'C', 'R'],
-        form: {
-          provider: [],
-          store: '',
+        step: 1,
+        // Form
+        store: null,
+        provider: null,
+        amount: null, // amount of product
+        product: null, // amount of product
+        // Table
+        headers: [
+          { text: 'Deposito', value: 'store', sortable: false },
+          { text: 'Proveedor', value: 'provider', sortable: false },
+          { text: 'Producto', value: 'product', sortable: false },
+          { text: 'Cantidad', value: 'amount', sortable: false },
+          { text: '#', align: 'center', sortable: false }
+        ],
+        // Only for display items in the table
+        table: [],
+        // Order to send
+        order: {
           order_type: 1,
-          // invoiceType: 'A',
-          // invoice: '',
-          products: [{product: '', amount: ''}]
-        },
-        rules: {
-          provider: [() => this.searchProviders.length > 0 || 'Seleccione un proveedor'],
-          store: [() => this.form.store.length > 0 || 'Seleccione un deposito']
+          provider: null,
+          store: null,
+          products: []
         },
         loadingProviders: false,
         loadingStores: false,
@@ -68,31 +92,27 @@
         providers: [],
         productList: [],
         stores: [],
-        searchProviders: [],
         searchProducts: []
       }
     },
+    computed: {
+      nextBtn () {
+        if (this.store !== null && this.provider !== null) {
+          return false
+        }
+        return true
+      }
+    },
     watch: {
-      searchProviders (val) {
-        // val && this.findProviders(val)
-      },
       searchProducts (val) {
+        if (this.productList.length > 0) return
         val && this.findProducts(val)
       }
     },
     methods: {
       onSubmit () {
         this.btnLoading = true
-        let formated = _.map(this.form.products, function (item) {
-          return {
-            id: item.product.id,
-            name: item.product.name,
-            amount: Number(item.amount)
-          }
-        })
-        let form = _.clone(this.form)
-        form.products = formated
-        this.$http.post('/orders', form)
+        this.$http.post('/orders', this.order)
           .then(response => {
             this.$messages.$emit('SHOW_MESSAGE', {
               color: 'success',
@@ -112,10 +132,32 @@
           })
       },
       addProduct () {
-        this.form.products.push({product: '', amount: ''})
+        // Add items to the order
+        this.order.products.push({
+          id: this.product.id,
+          name: this.product.name,
+          amount: this.amount
+        })
+        // Add items to the table
+        this.table.push({
+          store: this.store.name,
+          provider: this.provider.name,
+          product: this.product.name,
+          amount: this.amount
+        })
+        // Reset product and amount
+        this.product = null
+        this.amount = null
       },
-      removeProduct (i) {
-        this.form.products.splice(i, 1)
+      nextStep () {
+        this.order.store = this.store.id
+        this.order.provider = this.provider.id
+        this.step = 2
+      },
+      removeProduct (item) {
+        const index = this.table.indexOf(item)
+        this.table.splice(index, 1)
+        this.order.products.splice(index, 1)
       },
       findProducts (q) {
         // this.loadingProviders = true
@@ -162,5 +204,9 @@
 <style>
   div:not(.input-goup--focused) .input-group--select__autocomplete {
     display: none;
+  }
+  thead {
+    background-color: #e0e0e0!important;
+    border-color: #e0e0e0!important;
   }
 </style>
