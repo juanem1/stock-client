@@ -6,18 +6,22 @@
     </p>
     <v-form class="mb-2" ref="form" :model="form" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
-        <v-flex class="pr-3" sm10>
+        <v-flex class="pr-3" sm11>
           <v-text-field 
+           box
             v-model="form.product"
             :rules="rules.product"
             label="Buscar producto"
             required>
           </v-text-field>
         </v-flex>
-        <v-flex sm2>
-          <v-btn block color="primary" @click="search">
-            <v-icon>search</v-icon> Buscar
-          </v-btn>
+        <v-flex sm1 class="text-xs-center">
+          <v-tooltip bottom>
+            <v-btn fab :loading="loading" :disables="loading" slot="activator" color="info" class="ma-0" @click="search">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <span>Agregar producto</span>
+          </v-tooltip>
         </v-flex>
       </v-layout>
     </v-form>
