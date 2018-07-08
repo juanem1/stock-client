@@ -8,11 +8,12 @@
       <v-flex>
         <v-progress-circular v-if="formLoading" :size="50" indeterminate color="primary"></v-progress-circular>
         <v-form v-if="!formLoading" ref="form" lazy-validation>
-          <v-text-field v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
-          <v-text-field v-model="form.provider" label="Proveedor" required></v-text-field>
-          <v-text-field v-model="form.description" label="Descripcion"></v-text-field>
+          <v-text-field box v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
+          <v-autocomplete box :items="providers" :search-input.sync="searchProviders" :return-object="true" v-model="form.provider" label="Proveedor" item-text="name" item-value="id" required></v-autocomplete>
+          <v-combobox box :loading="unitsLoading" :items="units" v-model="form.unit" label="Unidad" item-text="type" item-value="id" required></v-combobox>
+          <v-text-field box v-model="form.description" label="Descripción (opcional)"></v-text-field>
           <!--v-btn class="ml-0" color="error" :loading="removeBtnLoading" @click="showConfirmation">Eliminar</v-btn-->
-          <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar cambios</v-btn>
+          <v-btn class="ml-0" color="success" :loading="btnLoading" :disabled="btnLoading" @click="onSubmit">Guardar cambios</v-btn>
         </v-form>
       </v-flex>
     </v-layout>
@@ -40,15 +41,29 @@
           provider: '',
           description: ''
         },
+        // Autocomplete providers
+        providers: [],
+        searchProviders: [],
+        loadingProviders: false,
+        units: ['Kg', 'Gr', 'Cajon', 'Caja', 'Bulto'],
         rules: {
           name: [
             v => !!v || 'Ingrese un nombre'
           ]
         },
         formLoading: true,
+        unitsLoading: true,
         btnLoading: false,
         removeBtnLoading: false,
         confirm: false
+      }
+    },
+    watch: {
+      searchProviders (val) {
+        if (this.form.provider && val) {
+          if (val === this.form.provider.name) return
+        }
+        val && this.findProviders(val)
       }
     },
     methods: {
@@ -61,6 +76,9 @@
           return
         }
         this.btnLoading = true
+        // Set the id of provider and unit
+        this.form.provider_id = this.form.provider.id
+        this.form.unit_id = this.form.unit.id
         this.$http.patch(`/products/${this.$route.params.id}`, this.form)
           .then(() => {
             this.$messages.$emit('SHOW_MESSAGE', {
@@ -93,13 +111,28 @@
       },
       showConfirmation () {
         this.confirm = true
+      },
+      findProviders (val) {
+        this.loadingProviders = true
+        this.$http.get(`/providers/search?q=${val}&searchType=combo`)
+          .then(response => {
+            this.providers = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .then(() => {
+            this.loadingProviders = false
+          })
       }
     },
     mounted: function () {
       this.$http.get(`/products/${this.$route.params.id}`)
         .then(response => {
           this.form.name = response.data.name
+          this.providers.push(response.data.provider)
           this.form.provider = response.data.provider
+          this.form.unit = response.data.unit
           this.form.description = response.data.description
         })
         .catch(() => {
@@ -110,6 +143,21 @@
         })
         .then(() => {
           this.formLoading = false
+        })
+
+      // Get all units
+      this.$http.get('/units')
+        .then(response => {
+          this.units = response.data
+        })
+        .catch(() => {
+          this.$messages.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Error al cargar las unidades disponibles'
+          })
+        })
+        .then(() => {
+          this.unitsLoading = false
         })
     }
   }
