@@ -10,7 +10,7 @@
         <v-form v-if="!formLoading" ref="form" lazy-validation>
           <v-text-field box v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
           <v-autocomplete box :items="providers" :search-input.sync="searchProviders" :return-object="true" v-model="form.provider" label="Proveedor" item-text="name" item-value="id" required></v-autocomplete>
-          <v-combobox box :loading="unitsLoading" :items="units" v-model="form.unit" label="Unidad" item-text="type" item-value="id" required></v-combobox>
+          <v-autocomplete box :loading="unitsLoading" :items="units" v-model="form.unit_id" label="Unidad" item-text="type" item-value="id" required></v-autocomplete>
           <v-text-field box v-model="form.description" label="Descripción (opcional)"></v-text-field>
           <!--v-btn class="ml-0" color="error" :loading="removeBtnLoading" @click="showConfirmation">Eliminar</v-btn-->
           <v-btn class="ml-0" color="success" :loading="btnLoading" :disabled="btnLoading" @click="onSubmit">Guardar cambios</v-btn>
@@ -37,15 +37,16 @@
     data: function () {
       return {
         form: {
-          name: '',
-          provider: '',
-          description: ''
+          name: null,
+          provider: null,
+          description: null,
+          unit_id: null
         },
         // Autocomplete providers
         providers: [],
         searchProviders: [],
         loadingProviders: false,
-        units: ['Kg', 'Gr', 'Cajon', 'Caja', 'Bulto'],
+        units: [],
         rules: {
           name: [
             v => !!v || 'Ingrese un nombre'
@@ -78,7 +79,6 @@
         this.btnLoading = true
         // Set the id of provider and unit
         this.form.provider_id = this.form.provider.id
-        this.form.unit_id = this.form.unit.id
         this.$http.patch(`/products/${this.$route.params.id}`, this.form)
           .then(() => {
             this.$messages.$emit('SHOW_MESSAGE', {
@@ -132,7 +132,7 @@
           this.form.name = response.data.name
           this.providers.push(response.data.provider)
           this.form.provider = response.data.provider
-          this.form.unit = response.data.unit
+          this.form.unit_id = response.data.unit
           this.form.description = response.data.description
         })
         .catch(() => {

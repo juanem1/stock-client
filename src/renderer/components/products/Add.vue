@@ -6,11 +6,12 @@
     </p>
     <v-layout>
       <v-flex>
-        <v-form ref="form" :model="form" lazy-validation>
-          <v-text-field v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
-          <v-text-field v-model="form.provider" label="Proveedor" required></v-text-field>
-          <v-text-field v-model="form.description" :rules="rules.description" label="Descripcion" required></v-text-field>
-          <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
+        <v-form ref="form" lazy-validation>
+          <v-text-field box v-model="form.name" label="Nombre" required></v-text-field>
+          <v-autocomplete box :items="providers" :search-input.sync="searchProviders" :return-object="true" v-model="form.provider" label="Proveedor" item-text="name" item-value="id" required></v-autocomplete>
+          <v-autocomplete box :items="units" :loading="unitsLoading" v-model="form.unit_id" label="Unidad" item-text="type" item-value="id" required></v-autocomplete>
+          <v-text-field box v-model="form.description" label="Descripción (opcional)" required></v-text-field>
+          <v-btn class="ml-0" color="success" :loading="btnLoading" :disabled="btnLoading" @click="onSubmit">Guardar</v-btn>
         </v-form>
       </v-flex>
     </v-layout>
@@ -23,19 +24,31 @@
     data: function () {
       return {
         form: {
-          name: '',
-          provider: '',
-          description: ''
+          name: null,
+          provider: null,
+          description: null,
+          unit_id: null
         },
         rules: {
-          name: [
-            v => !!v || 'El nombre del deposito es obligatorio'
-          ],
-          description: [
-            v => !!v || 'La descripcion del deposito es obligatoria'
-          ]
+          name: [v => !!v || 'El nombre del deposito es obligatorio'],
+          provider: [v => !!v || 'El nombre del proveedor es obligatorio'],
+          description: [v => !!v || 'La descripcion del deposito es obligatoria']
         },
+        units: [],
+        // Autocomplete providers
+        providers: [],
+        searchProviders: [],
+        loadingProviders: false,
+        unitsLoading: true,
         btnLoading: false
+      }
+    },
+    watch: {
+      searchProviders (val) {
+        if (this.form.provider && val) {
+          if (val === this.form.provider.name) return
+        }
+        val && this.findProviders(val)
       }
     },
     methods: {
@@ -48,6 +61,9 @@
           return
         }
         this.btnLoading = true
+        // Set the id of provider and unit
+        this.form.provider_id = this.form.provider.id
+        // this.form.unit_id = this.form.unit.id
         this.$http.post('/products', this.form)
           .then(response => {
             this.$messages.$emit('SHOW_MESSAGE', {
@@ -65,7 +81,36 @@
           .then(() => {
             this.btnLoading = false
           })
+      },
+      findProviders (val) {
+        this.loadingProviders = true
+        this.$http.get(`/providers/search?q=${val}&searchType=combo`)
+          .then(response => {
+            this.providers = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .then(() => {
+            this.loadingProviders = false
+          })
       }
+    },
+    mounted: function () {
+      // Get all units
+      this.$http.get('/units')
+        .then(response => {
+          this.units = response.data
+        })
+        .catch(() => {
+          this.$messages.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Error al cargar las unidades disponibles'
+          })
+        })
+        .then(() => {
+          this.unitsLoading = false
+        })
     }
   }
 </script>
