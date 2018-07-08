@@ -34,7 +34,7 @@
             </v-flex>
           </v-layout>
           <v-layout row wrap class="px-1">
-          <v-data-table 
+            <v-data-table 
               :headers="headers" 
               :items="table"
               :light="true"
