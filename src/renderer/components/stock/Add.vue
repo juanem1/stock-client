@@ -17,17 +17,20 @@
           <v-btn class="ml-0" color="primary" @click="nextStep" :disabled="nextBtn">Siguiente <v-icon>arrow_forward</v-icon></v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-layout row wrap class="mb-3 px-1">
-            <v-flex class="pr-3" sm7>
-              <v-autocomplete :items="productList" :return-object="true" :search-input.sync="searchProducts" v-model="product" label="Producto" item-text="name" item-value="id" required></v-autocomplete>
+          <v-layout row wrap class="px-1">
+            <v-flex sm8 class="pr-3">
+              <v-autocomplete box :items="productList" :return-object="true" :search-input.sync="searchProducts" v-model="product" label="Producto" item-text="name" item-value="id" required></v-autocomplete>
             </v-flex>
-            <v-flex sm2>
-              <v-text-field v-model="amount" label="Cantidad" mask="#######" required></v-text-field>
+            <v-flex sm3>
+              <v-text-field box v-model="amount" label="Cantidad" mask="#######" required></v-text-field>
             </v-flex>
-            <v-flex sm3 class="text-xs-right">
-              <v-btn color="info" @click="addProduct">Agregar producto
-                <v-icon>add</v-icon>
-              </v-btn>
+            <v-flex sm1 class="text-xs-right">
+              <v-tooltip bottom>
+                <v-btn fab slot="activator" color="info" class="ma-0" @click="addProduct">
+                  <v-icon>add</v-icon>
+                </v-btn>
+                <span>Agregar producto</span>
+              </v-tooltip>
             </v-flex>
           </v-layout>
           <v-layout row wrap class="px-1">
@@ -48,7 +51,7 @@
                 </td>
               </template>
             </v-data-table>
-            <v-flex sm12>
+            <v-flex sm12 class="mt-3">
               <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
             </v-flex>
           </v-layout>
@@ -125,13 +128,19 @@
               color: 'error',
               message: 'Por favor revise los errores del formulario'
             })
-            console.log(e)
           })
           .then(() => {
             this.btnLoading = false
           })
       },
       addProduct () {
+        if (this.product === null || this.amount === null) {
+          this.$messages.$emit('SHOW_MESSAGE', {
+            color: 'error',
+            message: 'Seleccione un producto y una cantidad'
+          })
+          return
+        }
         // Add items to the order
         this.order.products.push({
           id: this.product.id,
