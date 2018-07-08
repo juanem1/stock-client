@@ -22,16 +22,7 @@
         <td class="text-xs-left">{{ props.item.fromStore }}</td>
         <td class="text-xs-left">{{ props.item.toStore }}</td>
         <td class="text-xs-center">
-          <v-menu bottom left>
-            <v-btn icon class="mx-0" slot="activator">
-              <v-icon color="grey">more_vert</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-tile @click="openModal(props.item)">
-                <v-list-tile-title>Ver orden</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+          <v-icon small @click="openModal(props.item)">visibility</v-icon>
         </td>
       </template>
     </v-data-table>
