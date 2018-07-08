@@ -29,10 +29,8 @@
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.provider }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">
-          <v-btn icon class="mx-0" @click="editProduct(props.item.id)">
-            <v-icon>edit</v-icon>
-          </v-btn>
+        <td class="text-xs-center">
+          <v-icon small @click="editProduct(props.item.id)">edit</v-icon>
         </td>
       </template>
     </v-data-table>
@@ -54,7 +52,7 @@
           { text: 'Nombre', value: 'name' },
           { text: 'Proveedor', value: 'provider' },
           { text: 'Descripcion', value: 'description' },
-          { text: 'Acciones', value: '', sortable: false }
+          { text: '#', align: 'center', sortable: false }
         ],
         items: [],
         form: {
