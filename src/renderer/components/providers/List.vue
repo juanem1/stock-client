@@ -5,10 +5,8 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">
-          <v-btn icon class="mx-0" @click="editProvider(props.item.id)">
-            <v-icon>edit</v-icon>
-          </v-btn>
+        <td class="text-xs-center">
+          <v-icon small @click="editProvider(props.item.id)">edit</v-icon>
         </td>
       </template>
     </v-data-table>
@@ -29,7 +27,7 @@
         headers: [
           { text: 'Nombre', value: 'name' },
           { text: 'Descripcion', value: 'description' },
-          { text: 'Acciones', value: '', sortable: false }
+          { text: '#', align: 'center', sortable: false }
         ],
         items: [],
         loading: true

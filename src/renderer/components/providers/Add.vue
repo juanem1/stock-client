@@ -7,9 +7,9 @@
     <v-layout>
       <v-flex>
         <v-form ref="form" :model="form" lazy-validation>
-          <v-text-field v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
-          <v-text-field v-model="form.description" :rules="rules.description" label="Descripcion" required></v-text-field>
-          <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar</v-btn>
+          <v-text-field box v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
+          <v-text-field box v-model="form.description" :rules="rules.description" label="Descripcion" required></v-text-field>
+          <v-btn class="ml-0" color="success" :loading="btnLoading" :disabled="btnLoading" @click="onSubmit">Guardar</v-btn>
         </v-form>
       </v-flex>
     </v-layout>

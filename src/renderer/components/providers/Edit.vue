@@ -8,10 +8,10 @@
       <v-flex>
         <v-progress-circular v-if="formLoading" :size="50" indeterminate color="primary"></v-progress-circular>
         <v-form v-if="!formLoading" ref="form" lazy-validation>
-          <v-text-field v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
-          <v-text-field v-model="form.description" label="Descripcion"></v-text-field>
+          <v-text-field box v-model="form.name" :rules="rules.name" label="Nombre" required></v-text-field>
+          <v-text-field box v-model="form.description" label="Descripcion"></v-text-field>
           <!--v-btn class="ml-0" color="error" @click="remove">Eliminar</v-btn-->
-          <v-btn class="ml-0" color="success" :loading="btnLoading" @click="onSubmit">Guardar cambios</v-btn>
+          <v-btn class="ml-0" color="success" :loading="btnLoading" :disabled="btnLoading" @click="onSubmit">Guardar cambios</v-btn>
         </v-form>
       </v-flex>
     </v-layout>
