@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import voucher from '../../voucher'
   export default {
     name: 'order-details',
     data: function () {
@@ -70,12 +71,7 @@
         this.$emit('close')
       },
       showVoucher (item) {
-        let { BrowserWindow } = this.$electron.remote
-        let voucherWindow = new BrowserWindow({width: 800, height: 600})
-        voucherWindow.on('closed', () => {
-          voucherWindow = null
-        })
-        voucherWindow.loadURL(`${this.$http.defaults.baseURL}/voucher?api_token=${this.$store.state.User.apiToken}&id=${item.id}`)
+        voucher.open(this.$store.state.User.apiToken, item.id)
       }
     }
   }
