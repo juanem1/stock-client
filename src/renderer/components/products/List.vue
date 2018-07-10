@@ -3,18 +3,22 @@
     <p class="headline">Productos</p>
     <v-form ref="form" :model="form" class="mb-2" v-on:submit.prevent="search" lazy-validation>
       <v-layout row wrap>
-        <v-flex class="pr-3" sm10>
-          <v-text-field 
+        <v-flex class="pr-3" sm11>
+          <v-text-field
+            box 
             v-model="form.product" 
             label="Buscar producto" 
             :rules="rules.product"
             required>
           </v-text-field>
         </v-flex>
-        <v-flex sm2>
-          <v-btn block color="primary" @click="search">
-            <v-icon>search</v-icon> Buscar
-          </v-btn>
+        <v-flex sm1>
+          <v-tooltip bottom>
+            <v-btn fab :loading="loading" :disables="loading" slot="activator" color="info" class="ma-0" @click="search">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <span>Buscar producto</span>
+          </v-tooltip>
         </v-flex>
       </v-layout>
     </v-form>
@@ -69,7 +73,21 @@
         this.$router.push(`/l/products/${productId}/edit`)
       },
       search () {
-        console.log()
+        if (!this.$refs.form.validate()) {
+          return
+        }
+        this.items = []
+        this.loading = true
+        this.$http.get(`/products/search?q=${this.form.product}&searchType=rawList`)
+          .then(response => {
+            this.items = response.data
+          })
+          .catch(error => {
+            this.message = error.response.data.errors.email + error.response.data.errors.password
+          })
+          .then(() => {
+            this.loading = false
+          })
       }
     },
     mounted: function () {

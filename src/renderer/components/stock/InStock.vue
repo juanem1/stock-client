@@ -64,7 +64,7 @@
       }
     },
     methods: {
-      search: function () {
+      search () {
         if (!this.$refs.form.validate()) {
           return
         }
