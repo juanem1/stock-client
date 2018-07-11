@@ -17,7 +17,7 @@
         </td>
         <td class="text-xs-left">{{ props.item.user }}</td>
         <td class="text-xs-left">
-          <v-chip :color="chipColor(props.item.action)" text-color="white">
+          <v-chip :color="chipColor(props.item.action)" text-color="white" class="ma-0">
             <v-icon left>{{chipArrow(props.item.action)}}</v-icon>
             {{ props.item.action }}
           </v-chip>
