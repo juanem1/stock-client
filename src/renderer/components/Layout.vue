@@ -18,7 +18,7 @@
     <v-content>
       <v-toolbar color="primary" dark>
         <v-tooltip bottom>
-          <v-btn slot="activator" v-bind:class="{rotate: !drawer}" icon @click.native.stop="drawer = !drawer">
+          <v-btn slot="activator" v-bind:class="{rotate: !drawer}" icon @click.native.stop="toggleDrawer">
             <v-icon>chevron_left</v-icon>
           </v-btn>
           <span>{{hideMenuTooltip}}</span>
@@ -58,12 +58,13 @@
 <script>
   import stkMenu from './StkMenu'
   import messages from './Messages'
+  import cache from '../cache'
   
   export default {
     name: 'layout',
     data: function () {
       return {
-        drawer: true,
+        drawer: cache.has('drawer') ? cache.get('drawer') : true,
         userName: this.$store.state.User.name,
         company: this.$store.state.User.company,
         updateDisabled: true
@@ -74,18 +75,22 @@
       source: String
     },
     computed: {
-      showBadge: function () {
+      showBadge () {
         return !this.updateDisabled
       },
-      hideMenuTooltip: function () {
+      hideMenuTooltip () {
         return this.drawer ? 'Ocultar menu' : 'Mostrar menu'
       }
     },
     methods: {
-      installUpdate: function () {
+      installUpdate () {
         this.$electron.ipcRenderer.send('quitAndInstall')
       },
-      logout: function () {
+      toggleDrawer () {
+        this.drawer = !this.drawer
+        cache.set('drawer', this.drawer)
+      },
+      logout () {
         this.$store.commit('DELETE_USER')
         this.$http.defaults.headers.common = {
           'X-Requested-With': 'XMLHttpRequest',
