@@ -12,6 +12,7 @@
                 <v-form ref="form" :model="form" lazy-validation>
                   <v-text-field v-model="form.email" :rules="rules.email" prepend-icon="person" label="Email" required></v-text-field>
                   <v-text-field v-model="form.password" :rules="rules.password" prepend-icon="lock" label="Password" type="password" required></v-text-field>
+                  <v-checkbox v-model="remember" @change="rememberMe" label="Recordar Email" color="primary" class="mt-0"></v-checkbox>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -35,8 +36,8 @@
     data: function () {
       return {
         form: {
-          email: process.env.NODE_ENV === 'development' ? 'cbosco@example.org' : '',
-          password: process.env.NODE_ENV === 'development' ? 'secret' : ''
+          email: cache.has('remember') ? cache.get('remember') : '',
+          password: ''
         },
         rules: {
           email: [
@@ -48,7 +49,8 @@
             v => v.length >= 6 || 'La contraseña debe ser de al menos 6 caracteres'
           ]
         },
-        btnLoading: false
+        btnLoading: false,
+        remember: cache.has('remember')
       }
     },
     components: {
@@ -94,6 +96,13 @@
           .then(() => {
             this.btnLoading = false
           })
+      },
+      rememberMe () {
+        if (this.remember) {
+          cache.set('remember', this.form.email)
+        } else {
+          cache.delete('remember')
+        }
       }
     },
     beforeMount: function () {
@@ -105,3 +114,9 @@
     }
   }
 </script>
+
+<style>
+.v-input--checkbox {
+  margin-left: 30px;
+}
+</style>
