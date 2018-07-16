@@ -33,7 +33,7 @@
         update: null,
         updatesLoading: false,
         disableCheckForUpdates: false,
-        disableDownloadBtn: false
+        disableDownloadBtn: true
       }
     },
     methods: {
