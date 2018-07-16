@@ -4,20 +4,18 @@
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12">
+            <v-card class="elevation-8">
               <v-toolbar dark color="primary">
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form ref="form" :model="form" lazy-validation>
-                  <v-text-field v-model="form.email" :rules="rules.email" prepend-icon="person" label="Email" required></v-text-field>
-                  <v-text-field v-model="form.password" :rules="rules.password" prepend-icon="lock" label="Password" type="password" required></v-text-field>
-                  <v-checkbox v-model="remember" @change="rememberMe" label="Recordar Email" color="primary" class="mt-0"></v-checkbox>
+                  <v-text-field @keyup.enter="onSubmit" v-model="form.email" :rules="rules.email" prepend-icon="person" label="Email" required></v-text-field>
+                  <v-text-field @keyup.enter="onSubmit" v-model="form.password" :rules="rules.password" prepend-icon="lock" label="Password" type="password" required></v-text-field>
+                  <v-checkbox @keyup.enter="onSubmit" v-model="remember" @change="rememberMe" label="Recordar Email" color="primary" class="mt-0"></v-checkbox>
+                  <v-btn block :disabled="btnLoading" :loading="btnLoading" color="primary" @click="onSubmit">Login</v-btn>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-btn block :loading="btnLoading" color="primary" @click="onSubmit">Login</v-btn>
-              </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
@@ -57,7 +55,7 @@
       messages
     },
     methods: {
-      onSubmit: function () {
+      onSubmit () {
         if (!this.$refs.form.validate()) {
           this.$messages.$emit('SHOW_MESSAGE', {
             color: 'error',
