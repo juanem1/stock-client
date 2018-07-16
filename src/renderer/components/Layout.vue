@@ -26,7 +26,7 @@
         <v-toolbar-title>{{company}}</v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-tooltip bottom>
+        <!-- v-tooltip bottom>
           <v-btn slot="activator" icon :disabled="updateDisabled" @click.native.stop="installUpdate()">
             <v-badge color="red" v-model="showBadge" left>
               <span slot="badge">!</span>
@@ -34,7 +34,7 @@
             </v-badge>
           </v-btn>
           <span>Actualizar sistema</span>
-        </v-tooltip>
+        </v-tooltip-->
         
         <v-tooltip bottom>
           <v-btn slot="activator" icon @click.native.stop="logout()">
@@ -104,9 +104,9 @@
         this.$router.push('/')
       }
       // If there is a new update
-      this.$electron.ipcRenderer.on('updateReady', (event, data) => {
-        this.updateDisabled = false
-      })
+      // this.$electron.ipcRenderer.on('update-downloaded', (event, data) => {
+      //   this.updateDisabled = false
+      // })
     }
   }
 </script>

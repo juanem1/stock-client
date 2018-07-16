@@ -63,6 +63,15 @@
       </v-list-tile-content>
     </v-list-tile>
     <v-divider></v-divider>
+    <v-list-tile to="/l/config">
+      <v-list-tile-action>
+        <v-icon>settings</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Configuracion</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+    <v-divider></v-divider>
   </v-list>
 </template>
 

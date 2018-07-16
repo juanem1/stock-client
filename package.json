@@ -1,6 +1,6 @@
 {
   "name": "stock-client",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Juan Emilio Turk <juanemilioturk@gmail.com>",
   "description": "Stock controll for Layun Feria company",
   "license": "MIT",
@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "electron-log": "^2.2.16",
     "electron-store": "^2.0.0",
     "electron-updater": "^2.21.10",
     "lodash": "^4.17.10",
