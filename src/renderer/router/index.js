@@ -60,6 +60,9 @@ export default new Router({
         }, {
           path: '/l/stores/:id/edit',
           component: require('@/components/stores/Edit').default
+        }, {
+          path: '/l/config',
+          component: require('@/components/config/index').default
         }
       ]
     }/*, {
